@@ -2,9 +2,11 @@
 using System.Collections;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using JwtSecuritySample.Attributes;
 using JwtSecuritySample.Data;
 using JwtSecuritySample.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,13 +22,13 @@ namespace JwtSecuritySample.Controllers
             this.dbContext = dbContext;
         }
 
-        [HttpGet, Authorize(Roles = "Admin")]
+        [HttpGet, HeyAuthorize]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await dbContext.Users.ToListAsync());
         }
 
-        [HttpGet("{id}"), Authorize]
+        [HttpGet("{id}"), HeyAuthorize]
         public async Task<IActionResult> Get(long id)
         {
             var user = await dbContext.Users.FirstOrDefaultAsync(p => p.Id == id);
@@ -34,7 +36,7 @@ namespace JwtSecuritySample.Controllers
             return Ok(user);
         }
         
-        [HttpPost]
+        [HttpPost, HeyAuthorize]
         public async Task<IActionResult> Create(User user)
         {
             var entry = dbContext.Users.Add(user);
@@ -44,7 +46,7 @@ namespace JwtSecuritySample.Controllers
             return Ok(entry.Entity);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), HeyAuthorize]
         public async Task<IActionResult> Delete([FromRoute]long id)
         {
             var exist = await dbContext.Users.FirstOrDefaultAsync(p => p.Id == id);
@@ -57,7 +59,7 @@ namespace JwtSecuritySample.Controllers
             return Ok(true);
         }
 
-        [HttpPut]
+        [HttpPut, HeyAuthorize]
         public async Task<IActionResult> Update(User user)
         {
             var entry = dbContext.Users.Update(user);

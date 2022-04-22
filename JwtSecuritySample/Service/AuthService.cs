@@ -15,7 +15,7 @@ namespace JwtSecuritySample.Service
             {
                 new Claim(ClaimTypes.Name, user.Phone),
                 new Claim("Id", user.Id.ToString()),
-                new Claim(ClaimTypes.Role, user.Role.ToString())
+                new Claim(ClaimTypes.Role, user.RoleId.ToString())
             };
             
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));

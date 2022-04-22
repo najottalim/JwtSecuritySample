@@ -1,5 +1,5 @@
 ﻿using System;
-using JwtSecuritySample.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace JwtSecuritySample.Models
 {
@@ -9,6 +9,6 @@ namespace JwtSecuritySample.Models
         public string Name { get; set; }
         public string Phone { get; set; }
         public string Password { get; set; }
-        public UserRole Role { get; set; }
+        public long RoleId { get; set; }
     }
 }

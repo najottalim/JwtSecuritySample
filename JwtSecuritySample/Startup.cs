@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using JwtSecuritySample.Data;
+using JwtSecuritySample.Helpers;
 using JwtSecuritySample.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
@@ -66,6 +68,8 @@ namespace JwtSecuritySample
                 p.SwaggerDoc("v1", new OpenApiInfo { Title = "JwtSecuritySample", Description = "Nima gap", Version = "v1"});
             });
 
+            services.AddHttpContextAccessor();
+
             services.AddScoped<IAuthService, AuthService>();
         }
 
@@ -86,6 +90,18 @@ namespace JwtSecuritySample
             app.UseAuthentication();
             app.UseAuthorization();
 
+            // accessor
+            if(app.ApplicationServices.GetService<IHttpContextAccessor>() is not null)
+            {
+                HttpContextHelper.Accessor = app.ApplicationServices.GetService<IHttpContextAccessor>();
+            }
+
+            // configuration
+            if (app.ApplicationServices.GetService<IConfiguration>() is not null)
+            {
+                HttpContextHelper.Configuration = app.ApplicationServices.GetService<IConfiguration>();
+            }
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
