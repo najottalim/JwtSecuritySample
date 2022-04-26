@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using JwtSecuritySample.Attributes;
 using JwtSecuritySample.Data;
+using JwtSecuritySample.Helpers;
 using JwtSecuritySample.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -69,5 +70,12 @@ namespace JwtSecuritySample.Controllers
             return Ok(entry.Entity);
         }
         
+        [HttpGet("info")]
+        public async Task<IActionResult> GetInfo()
+        {
+            var user = await dbContext.Users.FirstOrDefaultAsync(p => p.Id.ToString() == HttpContextHelper.UserId.ToString());
+
+            return Ok(user);
+        }
     }
 }

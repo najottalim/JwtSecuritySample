@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 
 namespace JwtSecuritySample.Helpers
 {
@@ -10,6 +11,7 @@ namespace JwtSecuritySample.Helpers
         public static IHttpContextAccessor Accessor { get; set; }
         public static HttpContext Context => Accessor?.HttpContext;
         public static long? UserId => long.Parse(Context?.User?.FindFirst("Id")?.Value ?? "0");
+        public static long? RoleId => long.Parse(Context?.User?.FindFirst(ClaimTypes.Role.ToString())?.Value);
         public static string Route => GetCorrectedRoute();
         public static IConfiguration Configuration;
 

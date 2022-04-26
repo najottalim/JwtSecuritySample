@@ -18,9 +18,9 @@ namespace JwtSecuritySample.Attributes
                 context.Result = new UnauthorizedResult();
                 return base.OnActionExecutionAsync(context, next);
             }
-
+            
             // logic
-            AppDbContext dbContext = new AppDbContext(HttpContextHelper.Configuration);
+            var dbContext = new AppDbContext(HttpContextHelper.Configuration);
             var user = dbContext.Users.FirstOrDefault(p => p.Id == HttpContextHelper.UserId);
 
             if(user is null)
@@ -29,7 +29,10 @@ namespace JwtSecuritySample.Attributes
                 return base.OnActionExecutionAsync(context, next);
             }
 
-
+            if (user.RoleId != HttpContextHelper.RoleId)
+            {
+                context.Result = new ForbidResult();
+            }
 
             var rolePermissions = dbContext.UserRolePermissions.Where(p => p.RoleId == user.RoleId);
 
